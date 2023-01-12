@@ -62,20 +62,20 @@ function install() {
 }
 
 function install_terraform() {
-  # shell doesnt handle same name between functions well
+  # shell doesn't handle same name between functions well
   local -nr installation_args="${1}"
 
-  local package="terraform_${args[version]}_darwin_amd64.zip"
-  local url="https://releases.hashicorp.com/terraform/${args[version]}/${package}"
+  local package="terraform_${installation_args[version]}_linux_amd64.zip"
+  local url="https://releases.hashicorp.com/terraform/${installation_args[version]}/${package}"
 
   echo "Download ${url}"
   wget --no-verbose "${url}"
   unzip "${package}"
   echo "install to destination directory"
-  cp -v terraform "${args[directory]}"
-  echo "installed version" $("${args[directory]}/terraform" version -json | jq -r .terraform_version)
+  cp -v terraform "${installation_args[directory]}"
+  echo "installed version" $("${installation_args[directory]}/terraform" version -json | jq -r .terraform_version)
   rm "${package}"
-  rm terraform # remanent of unzip
+  rm terraform # remnant of unzip
 }
 
 # map of k-v pairs
