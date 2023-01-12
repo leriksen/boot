@@ -15,8 +15,10 @@ stages:
             displayName: install terraform
             inputs:
               targetType: filePath
-              filePath: ../scripts/terraform_install.sh
-              arguments: -v ${terraform_version} -d ${terraform_path}
+              filePath: scripts/terraform_install.sh
+              arguments: |
+                -v $(terraform_version)
+                -d $(terraform_path)
   - stage: terraform_apply
     displayName: Terraform Apply
     jobs:
