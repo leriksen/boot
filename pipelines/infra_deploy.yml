@@ -43,7 +43,7 @@ stages:
             env:
               SP_SECRET: $(sp_secret)
 
-          - task: AzureCLI@2
+          - task: Bash@3
             displayName: terraform init
             inputs:
               connectedServiceNameARM: sc-non-prod-iqsr-dev
@@ -56,8 +56,12 @@ stages:
                 -backend-config="container_name=$(container)"
                 -backend-config="key=iqsr-$(env).tfstate"
                 -backend-config="use_azuread_auth=true"
+                -backend-config="subscription_id=$(subscription_id)
+                -backend-config="tenant_id=$(tenancy)
             env:
               TF_IN_AUTOMATION: true
+              ARM_CLIENT_ID: $(client_id)
+              ARM_CLIENT_SECRET: $(sp_secret)
 
   - stage: terraform_apply
     displayName: Terraform Apply
