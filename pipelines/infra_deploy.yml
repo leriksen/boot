@@ -21,28 +21,28 @@ stages:
         workspace:
           clean: all
         steps:
-#          - task: Bash@3
-#            displayName: install terraform
-#            inputs:
-#              targetType: filePath
-#              filePath: scripts/terraform_install.sh
-#              arguments: >
-#                -v $(terraform_version)
-#                -d $(terraform_path)
-#
-#          - task: Bash@3
-#            displayName: build provider block
-#            inputs:
-#              targetType: filePath
-#              filePath: scripts/terraform_provider.sh
-#              arguments: >
-#                -t $(tenancy)
-#                -s $(subscription_id)
-#                -c $(client_id)
-#                -o terraform/provider.tf
-#            env:
-#              SP_SECRET: $(sp_secret)
-#
+          - task: Bash@3
+            displayName: install terraform
+            inputs:
+              targetType: filePath
+              filePath: scripts/terraform_install.sh
+              arguments: >
+                -v $(terraform_version)
+                -d $(terraform_path)
+
+          - task: Bash@3
+            displayName: build provider block
+            inputs:
+              targetType: filePath
+              filePath: scripts/terraform_provider.sh
+              arguments: >
+                -t $(tenancy)
+                -s $(subscription_id)
+                -c $(client_id)
+                -o terraform/provider.tf
+            env:
+              SP_SECRET: $(sp_secret)
+
           - task: Bash@3
             displayName: terraform init
             inputs:
