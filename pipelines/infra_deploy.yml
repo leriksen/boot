@@ -32,6 +32,7 @@ stages:
               scriptType: bash
               scriptLocation: scriptPath
               scriptPath: scripts/terraform_init.sh
+              workingDirectory: terraform
               arguments: >
                 -backend-config="storage_account_name=$(be_sa_name)"
                 -backend-config="container_name=$(be_container_name)"
