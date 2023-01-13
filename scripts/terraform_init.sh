@@ -3,5 +3,5 @@
 set -euo pipefail
 
 echo "terraform init ${*}"
-
+env
 terraform init "${@}"
