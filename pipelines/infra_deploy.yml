@@ -75,6 +75,25 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
+          - task: CopyFiles@2
+            displayName: start files for tf artifact
+            inputs:
+              sourceFolder: $(System.DefaultWorkingDirectory)
+              contents: |
+                terraform/**/*
+                scripts/terraform_apply.sh
+                !pipelines/**/*
+                !.gitignore
+                !**/.git/**/*
+                !terraform/.terraform/**/*
+              targetFolder: $(Build.ArtifactsStagingDirectory)
+              cleanTargetFolder: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: upload tf artifact
+            inputs:
+              artifactName: terraform
+
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
 #    jobs:
