@@ -62,6 +62,16 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
+          - task: Bash@3
+            displayName: terraform plan
+            inputs:
+              targetType: filePath
+              filePath: scripts/terraform_plan.sh
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+            env:
+              TF_IN_AUTOMATION: true
+              ARM_CLIENT_SECRET: $(sp_secret)
+
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
 #    jobs:
