@@ -50,7 +50,7 @@ stages:
               scriptType: bash
               scriptLocation: scriptPath
               scriptPath: scripts/terraform_init.sh
-              workingDirectory: terraform
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
               arguments: >
                 -backend-config="storage_account_name=$(sa)"
                 -backend-config="container_name=$(container)"
