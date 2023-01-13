@@ -72,6 +72,8 @@ stages:
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
             env:
               TF_IN_AUTOMATION: true
+              ARM_TENANT_ID: $(tenancy)
+              ARM_SUBSCRIPTION_ID: $(subscription_id)
 
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
