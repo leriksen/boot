@@ -39,6 +39,7 @@ stages:
                 -t $(tenancy)
                 -s $(subscription_id)
                 -c $(client_id)
+                -o terraform/provider.tf
             env:
               SP_SECRET: $(sp_secret)
 
