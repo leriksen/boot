@@ -31,7 +31,7 @@ stages:
               connectedServiceNameARM: sc-non-prod-iqsr-dev
               scriptType: bash
               scriptLocation: scriptPath
-              scriptPath: scripts/terraform_plan.sh
+              scriptPath: scripts/terraform_init.sh
               arguments: >
                 -backend-config="storage_account_name=$(be_sa_name)"
                 -backend-config="container_name=$(be_container_name)"

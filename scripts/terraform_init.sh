@@ -2,3 +2,6 @@
 
 set -euo pipefail
 
+echo "terraform init ${*}"
+
+terraform init "${@}"
