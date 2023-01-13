@@ -72,7 +72,6 @@ stages:
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
             env:
               TF_IN_AUTOMATION: true
-              ARM_CLIENT_SECRET: $(sp_secret)
 
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
