@@ -62,11 +62,13 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - task: Bash@3
+          - task: AzureCLI@2
             displayName: terraform plan
             inputs:
-              targetType: filePath
-              filePath: scripts/terraform_plan.sh
+              azureSubscription: sc-non-prod-iqsr-dev
+              scriptType: bash
+              scriptLocation: scriptPath
+              scriptPath: scripts/terraform_plan.sh
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
             env:
               TF_IN_AUTOMATION: true
