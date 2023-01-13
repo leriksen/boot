@@ -16,11 +16,11 @@ stages:
   - stage: terraform_plan
     displayName: Terraform Plan
     jobs:
-#      - job: terraform_plan
-#        displayName: Terraform Plan
-#        workspace:
-#          clean: all
-#        steps:
+      - job: terraform_plan
+        displayName: Terraform Plan
+        workspace:
+          clean: all
+        steps:
 #          - task: Bash@3
 #            displayName: install terraform
 #            inputs:
@@ -43,24 +43,24 @@ stages:
 #            env:
 #              SP_SECRET: $(sp_secret)
 #
-      - task: Bash@3
-        displayName: terraform init
-        inputs:
-          targetType: filePath
-          filePath: scripts/terraform_init.sh
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-          arguments: >
-            -backend-config="storage_account_name=$(sa)"
-            -backend-config="container_name=$(container)"
-            -backend-config="key=iqsr-$(env).tfstate"
-            -backend-config="use_azuread_auth=true"
-            -backend-config="subscription_id=$(subscription_id)
-            -backend-config="tenant_id=$(tenancy)
-        env:
-          TF_IN_AUTOMATION: true
-          ARM_TENANT_ID: $(tenancy)
-          ARM_CLIENT_ID: $(client_id)
-          ARM_CLIENT_SECRET: $(sp_secret)
+          - task: Bash@3
+            displayName: terraform init
+            inputs:
+              targetType: filePath
+              filePath: scripts/terraform_init.sh
+              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+              arguments: >
+                -backend-config="storage_account_name=$(sa)"
+                -backend-config="container_name=$(container)"
+                -backend-config="key=iqsr-$(env).tfstate"
+                -backend-config="use_azuread_auth=true"
+                -backend-config="subscription_id=$(subscription_id)
+                -backend-config="tenant_id=$(tenancy)
+            env:
+              TF_IN_AUTOMATION: true
+              ARM_TENANT_ID: $(tenancy)
+              ARM_CLIENT_ID: $(client_id)
+              ARM_CLIENT_SECRET: $(sp_secret)
 
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
