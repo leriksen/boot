@@ -24,7 +24,7 @@ stages:
               ARM_SUBSCRIPTION_ID: $(subscription_id)
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
-          - script: echo $(result)
+          - script: echo "$(result)"
 #          - task: CopyFiles@2
 #            displayName: stage files for tf artifact
 #            inputs:
