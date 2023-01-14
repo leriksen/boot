@@ -27,9 +27,9 @@ stages:
               ARM_CLIENT_SECRET: $(sp_secret)
           - script: echo "$(plan.result)"
 
-          - ${{ if eq(variables['plan.result'], 'unchanged') }}:
+          - ${{ if eq(variables.plan.result, 'unchanged') }}:
             - script: echo "norun"
-          - ${{ elseif eq(variables['plan.result'], 'changed') }}:
+          - ${{ elseif eq(variables.plan.result, 'changed') }}:
             - script: echo "run"
           - ${{ else }}:
             - script: echo "$(plan.result)"
