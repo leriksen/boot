@@ -14,7 +14,7 @@ stages:
             displayName: terraform plan
             inputs:
               targetType: filePath
-              filePath: scripts/result.sh
+              filePath: scripts/results.sh
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
             env:
               TF_IN_AUTOMATION: true
