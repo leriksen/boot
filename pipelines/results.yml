@@ -14,8 +14,9 @@ stages:
             displayName: terraform plan
             inputs:
               targetType: filePath
-              filePath: scripts/results.sh $(rc)
+              filePath: scripts/results.sh
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+              arguments: $(rc)
             env:
               TF_IN_AUTOMATION: true
               ARM_TENANT_ID: $(tenancy)
