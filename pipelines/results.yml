@@ -31,6 +31,8 @@ stages:
             - script: echo "norun"
           - ${{ elseif eq(variables['plan.result'], 'changed') }}:
             - script: echo "run"
+          - ${{ else }}:
+            - script: echo "$(plan.result)"
 
 #          - task: CopyFiles@2
 #            displayName: stage files for tf artifact
