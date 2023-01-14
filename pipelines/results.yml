@@ -10,6 +10,7 @@ stages:
         workspace:
           clean: all
         steps:
+          - script: echo $(rc)
           - task: Bash@3
             displayName: terraform plan
             inputs:
