@@ -26,6 +26,12 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
           - script: echo "$(plan.result)"
+
+          - ${{ if (and(succeeded(), eq(plan.result, 'unchanged') }}:
+            - script: echo "norun"
+          - ${{ if (and(succeeded(), eq(plan.result, 'changed') }}:
+            - script: echo "run"
+
 #          - task: CopyFiles@2
 #            displayName: stage files for tf artifact
 #            inputs:
