@@ -26,12 +26,9 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - script: echo "$[variables['plan.result']]"
-            displayName: runtime expansion
-
-          - ${{ if eq(variables['plan.result'], 'unchanged') }}:
+          - ${{ if eq(variables['result'], 'unchanged') }}:
             - script: echo "norun"
-          - ${{ elseif eq(variables['plan.result'], 'changed') }}:
+          - ${{ elseif eq(variables['result'], 'changed') }}:
             - script: echo "run"
           - ${{ else }}:
             - script: echo "$(plan.result)"
