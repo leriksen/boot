@@ -59,7 +59,9 @@ stages:
 
   - stage: terraform_apply
     displayName: Terraform Apply
-    condition: and(succeeded(), eq(stageDependencies.terraform_plan.terraform_plan.outputs['plan.result'], 'changed'))
+    # note the syntax for conditions is different to setting variables
+    # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops
+    condition: and(succeeded(), eq(dependencies.terraform_plan.outputs['terraform_plan.plan.result'], 'changed')) ]
     jobs:
       - deployment: terraform_apply
         displayName: Terraform Apply
