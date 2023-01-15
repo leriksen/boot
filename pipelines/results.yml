@@ -29,7 +29,7 @@ stages:
 
           - script: echo "$(plan.result)"
             displayName: show result conditionally
-            condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
+            condition: and(succeeded(), eq(variables['plan.result'], 'unchanged'))
 
 #          - task: CopyFiles@2
 #            displayName: stage files for tf artifact
