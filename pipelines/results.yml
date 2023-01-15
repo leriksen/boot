@@ -27,7 +27,7 @@ stages:
               ARM_CLIENT_SECRET: $(sp_secret)
           - script: echo "$(plan.result)"
 
-          - script: echo "${{ convertToJson(variables) }}
+          - script: echo '${{ convertToJson(variables) }}'
 
           - ${{ if eq(variables.plan.result, 'unchanged') }}:
             - script: echo "norun"
