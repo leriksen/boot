@@ -26,8 +26,11 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - script: echo "$[plan.result]"
-            displayName: runtimeexpansion
+          - script: echo "$(result)"
+            displayName: unqualified
+
+          - script: echo "$['plan.result']"
+            displayName: runtime expansion
 
           - ${{ if eq(variables['plan.result'], 'unchanged') }}:
             - script: echo "norun"
