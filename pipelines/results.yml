@@ -59,7 +59,7 @@ stages:
 
   - stage: terraform_apply
     displayName: Terraform Apply
-    condition: and(succeeded(), eq(stageDependencies.terraform_plan.terraform_plan.outputs['result'], 'unchanged'))
+    condition: and(succeeded(), eq(stageDependencies.terraform_plan.terraform_plan.outputs['plan.result'], 'changed'))
     jobs:
       - deployment: terraform_apply
         displayName: Terraform Apply
