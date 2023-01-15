@@ -11,6 +11,7 @@ stages:
           clean: all
         steps:
           - script: echo $(rc)
+
           - task: Bash@3
             displayName: terraform plan
             name: plan # needed for result later
@@ -26,15 +27,11 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - ${{ if eq(plan.result, 'unchanged') }}:
-            - script: echo "norun"
-          - ${{ elseif eq(plan.result, 'changed') }}:
-            - script: echo "run"
-          - ${{ else }}:
-            - script: echo "$(plan.result)"
+          - script: echo "$(plan.result)"
 
 #          - task: CopyFiles@2
 #            displayName: stage files for tf artifact
+#            condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
 #            inputs:
 #              sourceFolder: $(System.DefaultWorkingDirectory)
 #              contents: |
