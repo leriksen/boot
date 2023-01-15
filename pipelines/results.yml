@@ -26,9 +26,9 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - ${{ if eq(dependencies.plan.result, 'unchanged') }}:
+          - ${{ if eq(plan.result, 'unchanged') }}:
             - script: echo "norun"
-          - ${{ elseif eq(dependencies.plan.result, 'changed') }}:
+          - ${{ elseif eq(plan.result, 'changed') }}:
             - script: echo "run"
           - ${{ else }}:
             - script: echo "$(plan.result)"
