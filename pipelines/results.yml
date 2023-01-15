@@ -27,29 +27,26 @@ stages:
               ARM_CLIENT_ID: $(client_id)
               ARM_CLIENT_SECRET: $(sp_secret)
 
-          - script: echo "$(plan.result)"
-            displayName: show result conditionally
-            condition: and(succeeded(), eq(variables['plan.result'], 'unchanged'))
+          - task: CopyFiles@2
+            displayName: stage files for tf artifact
+            condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
+            inputs:
+              sourceFolder: $(System.DefaultWorkingDirectory)
+              contents: |
+                terraform/**/*
+                scripts/terraform_apply.sh
+                !pipelines/**/*
+                !.gitignore
+                !**/.git/**/*
+                !terraform/.terraform/**/*
+              targetFolder: $(Build.ArtifactsStagingDirectory)
+              cleanTargetFolder: true
 
-#          - task: CopyFiles@2
-#            displayName: stage files for tf artifact
-#            condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
-#            inputs:
-#              sourceFolder: $(System.DefaultWorkingDirectory)
-#              contents: |
-#                terraform/**/*
-#                scripts/terraform_apply.sh
-#                !pipelines/**/*
-#                !.gitignore
-#                !**/.git/**/*
-#                !terraform/.terraform/**/*
-#              targetFolder: $(Build.ArtifactsStagingDirectory)
-#              cleanTargetFolder: true
-#
-#          - task: PublishBuildArtifacts@1
-#            displayName: upload tf artifact
-#            inputs:
-#              artifactName: terraform-plan
+          - task: PublishBuildArtifacts@1
+            displayName: upload tf artifact
+            condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
+            inputs:
+              artifactName: terraform-plan
 
 #  - stage: terraform_apply
 #    displayName: Terraform Apply
