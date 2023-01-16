@@ -63,11 +63,12 @@ function write_azure_provider_block() {
 # heredocs strips tabs, use spaces, format is important
   cat>"${args[filename]}" <<EOT
 provider "azurerm" {
-  tenant_id           = "${args[tenancy]}"
-  subscription_id     = "${args[subscription]}"
-  client_id           = "${args[client]}"
-  client_secret       = "${SP_SECRET}"
-  storage_use_azuread = true
+  tenant_id                  = "${args[tenancy]}"
+  subscription_id            = "${args[subscription]}"
+  client_id                  = "${args[client]}"
+  client_secret              = "${SP_SECRET}"
+  storage_use_azuread        = true
+  skip_provider_registration = true
   features {
     resource_group {
       prevent_deletion_if_contains_resources = true
