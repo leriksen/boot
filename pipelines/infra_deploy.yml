@@ -1,8 +1,8 @@
 variables:
   - group: terraform-base
-  - group: azurerm-base
-  - group: azurerm-non-prod
-  - group: azurerm-dev
+  - group: devops-base
+  - group: devops-non-prod
+  - group: devops-dev
 
 pool:
   vmImage: ubuntu-22.04
