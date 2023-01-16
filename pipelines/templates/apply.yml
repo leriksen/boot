@@ -3,7 +3,6 @@ parameters:
     default: 1.3.7
   - name: terraform_path
     default: /usr/local/bin
-  - name: environment
   - name: sa
   - name: container
   - name: environment
