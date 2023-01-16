@@ -1,0 +1,77 @@
+parameters:
+  - name: terraform_version
+    default: 1.3.7
+  - name: terraform_path
+    default: /usr/local/bin
+  - name: environment
+  - name: sa
+  - name: container
+  - name: env
+  - name: subscription_id
+  - name: tenancy
+  - name: client_id
+  - name: client_secret
+
+stages:
+  - stage: terraform_apply
+    displayName: Terraform Apply
+    # note the syntax for conditions is different to setting variables
+    # https://learn.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops
+    condition: and(succeeded(), eq(dependencies.terraform_plan.outputs['terraform_plan.plan.result'], 'changed'))
+    jobs:
+      - deployment: terraform_apply
+        displayName: Terraform Apply
+        workspace:
+          clean: all
+        environment: ${{ parameters.environment }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: Bash@3
+                  displayName: install terraform
+                  inputs:
+                    targetType: filePath
+                    filePath: scripts/terraform_install.sh
+                    arguments: >
+                      -v ${{ parameters.terraform_version }}
+                      -d ${{ parameters.terraform_path }}
+
+                - task: Bash@3
+                  displayName: prepend terraform path
+                  inputs:
+                    targetType: inline
+                    script: |
+                      echo "##vso[task.prependpath]${{ parameters.terraform_path }}"
+
+                - task: Bash@3
+                  displayName: terraform init
+                  inputs:
+                    targetType: filePath
+                    filePath: scripts/terraform_init.sh
+                    workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+                    arguments: >
+                      -backend-config="storage_account_name=${{ parameters.sa }}"
+                      -backend-config="container_name=${{ parameters.container }}"
+                      -backend-config="key=iqsr-${{ parameters.env }}.tfstate"
+                      -backend-config="use_azuread_auth=true"
+                      -backend-config="subscription_id=${{ parameters.subscription_id }}
+                      -backend-config="tenant_id=${{ parameters.tenancy }}
+                  env:
+                    TF_IN_AUTOMATION: true
+                    ARM_TENANT_ID: ${{ parameters.tenancy }}
+                    ARM_CLIENT_ID: ${{ parameters.client_id }}
+                    ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
+
+                - task: Bash@3
+                  displayName: terraform apply
+                  inputs:
+                    targetType: filePath
+                    filePath: scripts/terraform_apply.sh
+                    workingDirectory: $(Agent.BuildDirectory)/terraform-plan/terraform
+                  env:
+                    TF_IN_AUTOMATION: true
+                    ARM_TENANT_ID: ${{ parameters.tenancy }}
+                    ARM_SUBSCRIPTION_ID: ${{ parameters.subscription_id }}
+                    ARM_CLIENT_ID: ${{ parameters.client_id }}
+                    ARM_CLIENT_SECRET: ${{ parameters.client_secret }}

@@ -1,8 +1,5 @@
 variables:
-  - name: terraform_version
-    value: 1.3.7
-  - name: terraform_path
-    value: /usr/local/bin
+  - group: terraform-base
   - group: azurerm-base
   - group: azurerm-non-prod
   - group: azurerm-dev
@@ -11,127 +8,26 @@ pool:
   vmImage: ubuntu-22.04
 
 stages:
-  - stage: terraform_plan
-    displayName: Terraform Plan
-    jobs:
-      - job: terraform_plan
-        displayName: Terraform Plan
-        workspace:
-          clean: all
-        steps:
-          - task: Bash@3
-            displayName: install terraform
-            inputs:
-              targetType: filePath
-              filePath: scripts/terraform_install.sh
-              arguments: >
-                -v $(terraform_version)
-                -d $(terraform_path)
+  - template: ./templates/plan.yml
+    parameters:
+      terraform_version: $(terraform_version)
+      terraform_path:    $(terraform_path)
+      tenancy:           $(tenancy)
+      subscription_id:   $(subscription_id)
+      client_id:         $(client_id)
+      client_secret:     $(client_secret)
+      sa:                $(sa)
+      container:         $(container)
+      env:               $(env)
 
-          - task: Bash@3
-            displayName: build provider block
-            inputs:
-              targetType: filePath
-              filePath: scripts/terraform_provider.sh
-              arguments: >
-                -t $(tenancy)
-                -s $(subscription_id)
-                -c $(client_id)
-                -o terraform/provider.tf
-            env:
-              SP_SECRET: $(sp_secret)
-
-          - task: Bash@3
-            displayName: terraform init
-            inputs:
-              targetType: filePath
-              filePath: scripts/terraform_init.sh
-              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-              arguments: >
-                -backend-config="storage_account_name=$(sa)"
-                -backend-config="container_name=$(container)"
-                -backend-config="key=iqsr-$(env).tfstate"
-                -backend-config="use_azuread_auth=true"
-                -backend-config="subscription_id=$(subscription_id)
-                -backend-config="tenant_id=$(tenancy)
-            env:
-              TF_IN_AUTOMATION: true
-              ARM_TENANT_ID: $(tenancy)
-              ARM_CLIENT_ID: $(client_id)
-              ARM_CLIENT_SECRET: $(sp_secret)
-
-          - task: Bash@3
-            displayName: terraform plan
-            inputs:
-              targetType: filePath
-              filePath: scripts/terraform_plan.sh
-              workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-            env:
-              TF_IN_AUTOMATION: true
-              ARM_TENANT_ID: $(tenancy)
-              ARM_SUBSCRIPTION_ID: $(subscription_id)
-              ARM_CLIENT_ID: $(client_id)
-              ARM_CLIENT_SECRET: $(sp_secret)
-
-          - task: CopyFiles@2
-            displayName: stage files for tf artifact
-            inputs:
-              sourceFolder: $(System.DefaultWorkingDirectory)
-              contents: |
-                terraform/**/*
-                scripts/terraform_apply.sh
-                !pipelines/**/*
-                !.gitignore
-                !**/.git/**/*
-                !terraform/.terraform/**/*
-              targetFolder: $(Build.ArtifactsStagingDirectory)
-              cleanTargetFolder: true
-
-          - task: PublishBuildArtifacts@1
-            displayName: upload tf artifact
-            inputs:
-              artifactName: terraform-plan
-
-  - stage: terraform_apply
-    displayName: Terraform Apply
-    jobs:
-      - deployment: terraform_apply
-        displayName: Terraform Apply
-        workspace:
-          clean: all
-        environment: $(environment)
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: Bash@3
-                  displayName: terraform init
-                  inputs:
-                    targetType: filePath
-                    filePath: scripts/terraform_init.sh
-                    workingDirectory: $(System.DefaultWorkingDirectory)/terraform
-                    arguments: >
-                      -backend-config="storage_account_name=$(sa)"
-                      -backend-config="container_name=$(container)"
-                      -backend-config="key=iqsr-$(env).tfstate"
-                      -backend-config="use_azuread_auth=true"
-                      -backend-config="subscription_id=$(subscription_id)
-                      -backend-config="tenant_id=$(tenancy)
-                  env:
-                    TF_IN_AUTOMATION: true
-                    ARM_TENANT_ID: $(tenancy)
-                    ARM_CLIENT_ID: $(client_id)
-                    ARM_CLIENT_SECRET: $(sp_secret)
-
-                - task: Bash@3
-                  displayName: terraform apply
-                  inputs:
-                    targetType: filePath
-                    filePath: scripts/terraform_apply.sh
-                    workingDirectory: $(Agent.BuildDirectory)/terraform-plan/terraform
-                  env:
-                    TF_IN_AUTOMATION: true
-                    ARM_TENANT_ID: $(tenancy)
-                    ARM_SUBSCRIPTION_ID: $(subscription_id)
-                    ARM_CLIENT_ID: $(client_id)
-                    ARM_CLIENT_SECRET: $(sp_secret)
+  - template: ./templates/apply.yml
+    parameters:
+      terraform_version: $(terraform_version)
+      terraform_path:    $(terraform_path)
+      tenancy:           $(tenancy)
+      subscription_id:   $(subscription_id)
+      client_id:         $(client_id)
+      client_secret:     $(client_secret)
+      sa:                $(sa)
+      container:         $(container)
+      env:               $(env)
