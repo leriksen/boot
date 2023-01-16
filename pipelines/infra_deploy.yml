@@ -18,7 +18,7 @@ stages:
       client_secret:     $(client_secret)
       sa:                $(sa)
       container:         $(container)
-      env:               $(env)
+      environment:       $(environment)
 
   - template: ./templates/apply.yml
     parameters:
@@ -30,4 +30,4 @@ stages:
       client_secret:     $(client_secret)
       sa:                $(sa)
       container:         $(container)
-      env:               $(env)
+      environment:       $(environment)
