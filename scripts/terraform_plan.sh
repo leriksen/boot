@@ -4,7 +4,7 @@ set -euo pipefail
 
 # -detailed error code give 2 as rc if plan needs an apply
 set +e
-terraform plan -detailed-exitcode "${@}" -out tfplan.tfout
+terraform plan -detailed-exitcode "${@}"
 rc=$?
 set -e
 
