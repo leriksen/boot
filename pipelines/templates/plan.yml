@@ -9,7 +9,7 @@ parameters:
   - name: client_secret
   - name: sa
   - name: container
-  - name: env
+  - name: environment
 
 stages:
   - stage: terraform_plan
@@ -58,7 +58,7 @@ stages:
               arguments: >
                 -backend-config="storage_account_name=${{ parameters.sa }}"
                 -backend-config="container_name=${{ parameters.container }}"
-                -backend-config="key=iqsr-${{ parameters.env }}.tfstate"
+                -backend-config="key=iqsr-${{ parameters.environment }}.tfstate"
                 -backend-config="use_azuread_auth=true"
                 -backend-config="subscription_id=${{ parameters.subscription_id }}
                 -backend-config="tenant_id=${{ parameters.tenancy }}
