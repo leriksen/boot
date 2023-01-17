@@ -77,8 +77,7 @@ stages:
               workingDirectory: $(System.DefaultWorkingDirectory)/terraform
               arguments: >
                 -out tfplan.tfout
-                -var "rg=$(rg)"
-                -var "env=$(environment)
+                -var "env=$(environment)"
             env:
               TF_IN_AUTOMATION: true
               ARM_TENANT_ID: ${{ parameters.tenancy }}
