@@ -51,7 +51,7 @@ stages:
                   inputs:
                     targetType: filePath
                     filePath: scripts/terraform_init.sh
-                    workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+                    workingDirectory: $(Agent.BuildDirectory)/terraform-plan/terraform
                     arguments: >
                       -backend-config="storage_account_name=${{ parameters.sa }}"
                       -backend-config="container_name=${{ parameters.container }}"
