@@ -31,3 +31,4 @@ stages:
       sa:                $(sa)
       container:         $(container)
       environment:       $(environment)
+      azdo_release_env:  $(azdo_release_env)

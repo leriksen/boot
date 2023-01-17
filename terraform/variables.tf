@@ -1,4 +1,4 @@
-variable "rg" {
-  description = "resource group to deploy iac to. SC requires contributor at least to this rg"
+variable "env" {
+  description = "where we are deploying the iac to"
   type = string
 }

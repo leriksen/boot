@@ -70,6 +70,7 @@ stages:
 
           - task: Bash@3
             displayName: terraform plan
+            name: plan # needed for result later
             inputs:
               targetType: filePath
               filePath: scripts/terraform_plan.sh
@@ -77,6 +78,7 @@ stages:
               arguments: >
                 -out tfplan.tfout
                 -var "rg=$(rg)"
+                -var "env=$(environment)
             env:
               TF_IN_AUTOMATION: true
               ARM_TENANT_ID: ${{ parameters.tenancy }}
@@ -85,18 +87,18 @@ stages:
               ARM_CLIENT_SECRET: ${{ parameters.client_secret }}
 
           - task: CopyFiles@2
-            displayName: stage files for tf artifact
+            displayName: stage files to $(Build.StagingDirectory)
             condition: and(succeeded(), eq(variables['plan.result'], 'changed'))
             inputs:
               sourceFolder: $(System.DefaultWorkingDirectory)
               contents: |
                 terraform/**/*
-                scripts/terraform_apply.sh
+                !scripts/**/*
                 !pipelines/**/*
                 !.gitignore
                 !**/.git/**/*
                 !terraform/.terraform/**/*
-              targetFolder: $(Build.ArtifactsStagingDirectory)
+              targetFolder: $(Build.StagingDirectory)
               cleanTargetFolder: true
 
           - task: PublishBuildArtifacts@1

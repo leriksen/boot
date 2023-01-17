@@ -6,6 +6,7 @@ parameters:
   - name: sa
   - name: container
   - name: environment
+  - name: azdo_release_env
   - name: subscription_id
   - name: tenancy
   - name: client_id
@@ -22,11 +23,13 @@ stages:
         displayName: Terraform Apply
         workspace:
           clean: all
-        environment: ${{ parameters.environment }}
+        environment: ${{ parameters.azdo_release_env }}
         strategy:
           runOnce:
             deploy:
               steps:
+                - checkout: self
+
                 - task: Bash@3
                   displayName: install terraform
                   inputs:
