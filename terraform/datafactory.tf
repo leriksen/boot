@@ -42,4 +42,5 @@ resource "azurerm_data_factory" "example" {
      repository_name = "datascience"
      root_folder     = "/"
      tenant_id       = data.azurerm_client_config.current.tenant_id
-   }}
+   }
+}
